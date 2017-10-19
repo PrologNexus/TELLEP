@@ -1,0 +1,66 @@
+#+TITLE: TELLEP: Yet Another DL Reasoned That Doesn't Compile
+#+AUTHOR: Wouter Beek
+#+STARTUP: latexpreview
+
+* TR;DR
+
+Start TELLEP in debug mode, for fancy printed messages:
+
+#+BEGIN_SRC sh
+$ swipl debug.pl
+#+END_SRC
+
+First, create your T-Box by asserting inclusion axioms:
+
+#+BEGIN_SRC prolog
+?- assert(subClassOf(human,fallible)).
+#+END_SRC
+
+Then, assert your A-Box:
+
+#+BEGIN_SRC prolog
+?- socrates :: human.
+#+END_SRC
+
+Whenever something can de deduced, the reasoner will immediately
+answer:
+
+#+BEGIN_SRC
+socrates::human
+human ⊑ fallible
+────────────────
+socrates::fallible
+#+END_SRC
+
+* Interaction language
+
+For interacting with the reasoner we use an ASCII-based notation that
+easy to type on most keyboards.  We stay close to the /Manchester
+Syntax/:
+
+  | *Manchester formula* | *DL formula* |
+  |----------------------+--------------|
+  | subClassOf(C,D)      | C ⊑ D        |
+  | fail                 | ⊥            |
+  | not A                | (¬A)         |
+  | C and D              | (C ⊓ D)      |
+  | R only C             | ∀R C         |
+  | R some C             | ∃R C         |
+  | a::C                 | a::C         |
+  | (a,b)::R             | (a,b)::R     |
+
+* Presentation language
+
+For presenting/printing results we can use non-ASCII symbols.  We try
+to stay close to the syntax used in /Description Logic Handbook/:
+
+  | *Formula* | *Fancy name*                       | *Meaning*                                                                                                  |
+  |-----------+------------------------------------+------------------------------------------------------------------------------------------------------------|
+  | C ⊑ D     | inclusion axiom                    | $C^\mathcal{I} \subseteq D^\mathcal{I}$                                                                    |
+  | ⊥         | falsum                             | $\emptyset$                                                                                                |
+  | (¬A)      | atomic negation                    | $\Delta^\mathcal{I} \setminus A^\mathcal{I}$                                                               |
+  | (C ⊓ D)   | intersection                       | $C^\mathcal{I} \cap D^\mathcal{I}$                                                                         |
+  | ∀R C      | value restriction                  | $\{ a \in \Delta^\mathcal{I} \vert \forall b . (a,b) \in R^\mathcal{I} \rightarrow b \in C^\mathcal{I} \}$ |
+  | ∃R C      | limited existential quantification | $\{ a \in \Delta^\mathcal{I} \vert \exists b . (a,b) \in R^\mathcal{I}}$                                   |
+  | a::C      | concept assertion                  | $a^\mathcal{I} \in C^\mathcal{I}$                                                                          |
+  | (a,b)::R  | role assertion                     | $(a^\mathcal{I}, b^\mathcal{I}) \in R^\mathcal{I}$                                                         |
