@@ -2,9 +2,9 @@
   tellep,
   [
     '::'/2,
-    equiv/2,
+    equal/2,
     subclass/2,
-    op(952, xfx, equiv),
+    op(952, xfx, equal),
     op(951, xfy, subclass),
     op(950, xfx, ::),
     op(940, xfy, or),
@@ -23,13 +23,24 @@ It has constraints for the entailment of ALC, and it has rewriting
 rules from ALC to ALC-NNF.
 
 @author Wouter Beek
+@tbd Number restrictions
 @version 2017/10
 */
 
 :- use_module(library(chr)).
 
 :- chr_constraint
-   (::)/2, equiv/2, subclass/2.
+   (::)/2, equal/2, subclass/2.
+
+remove_duplicates@
+  A :: C \ A :: C <=>
+  chr_msg("♲") |
+  true.
+
+contradiction@
+  A :: not C, A :: C <=>
+  chr_msg(rule([A :: not C,A :: C],[false])) |
+  fail.
 
 /* bottom concept
 FL_0, FL^-, AL
@@ -37,23 +48,28 @@ FL_0, FL^-, AL
 a . ⊥
 ──────
 ⊥
-
-a . ¬C
-a .  C
-──────
-⊥
 */
 bottom_concept@
   A :: bottom <=>
   chr_msg(rule([A :: bottom],[false])) |
   fail.
-contradiction@
-  A :: not C, A :: C <=>
-  chr_msg(rule([A :: not C,A :: C],[false])) |
-  fail.
+
+/* full existential quantification
+E
+
+a . ∃R C
+──────────
+〈a,b〉 . R
+b . C
+*/
+full_existential_quantification@
+  A :: R some C <=>
+  chr_msg(rule([A :: R some C],[(A,B) :: R,B :: C])) |
+  (A,B) :: R,
+  B :: C.
 
 /* intersection
-FL_0, FL^`, AL
+FL0, FL-, AL
 
 a . C ⊓ D
 ─────────
@@ -76,20 +92,6 @@ limited_existential_quantification@
   A :: R some top <=>
   chr_msg(rule([A :: R some top],[(A,B) :: R])) |
   (A,B) :: R.
-
-/* existential quantification
-???
-
-a . ∃R C
-──────────
-〈a,b〉 . R
-b . C
-*/
-existential_quantification@
-  A :: R some C <=>
-  chr_msg(rule([A :: R some C],[(A,B) :: R,B :: C])) |
-  (A,B) :: R,
-  B :: C.
 
 /* top concept
 FL_0, FL^-, AL
@@ -130,20 +132,20 @@ value_restriction@
 
 /* TBox */
 
-/* equivalence
+/* equality
 
 C ≡ D
 ─────
 C ⊑ D
 D ⊑ C
 */
-equivalence@
-  C equiv D <=>
-  chr_msg(rule([C equiv D],[C subclass D,D subclass C])) |
+equality@
+  C equal D <=>
+  chr_msg(rule([C equal D],[C subclass D,D subclass C])) |
   C subclass D,
   D subclass C.
 
-/* subsumption
+/* inclusion
 
 a . C
 C ⊑ D
@@ -155,56 +157,65 @@ C ⊑ D
 ──────
 a . ¬D
 */
-positive_subsumption@
+positive_inclusion@
   A :: C,
   C subclass D <=>
   chr_msg(rule([A :: C,C subclass D],[A :: D])) |
   A :: D.
-negative_subsumption@
-  A :: not C,
+negative_inclusion@
+  A :: not D,
   C subclass D <=>
-  chr_msg(rule([A :: not C,C subclass D],[A :: not D])) |
-  A :: not D.
+  chr_msg(rule([A :: not D,C subclass D],[A :: not C])) |
+  A :: not C.
 
 
 
-/* NNF */
+/* complement
+C
 
-% a . ¬¬C
-% ───────
-% a . C
+Translate formula's to NNF.
+
+a . ¬¬C
+───────
+a . C
+
+a . ¬(C ⊓ D)
+────────────
+a . ¬C ⊔ ¬D
+
+a . ¬(C ⊔ D)
+────────────
+a . ¬C ⊓ ¬D
+
+a . ¬(∃R C)
+───────────
+a . ∀R ¬C
+
+a . ¬(∀R C)
+───────────
+a . ∃R ¬C
+*/
+
 '¬¬-elimination'@
   A :: not not C <=>
   chr_msg(rule([A :: not not C],[A :: C])) |
   A :: C.
 
-% a . ¬(C ⊓ D)
-% ────────────
-% a . ¬C ⊔ ¬D
 '⊓-DeMorgan'@
   A :: not (C and D) <=>
   chr_msg(rule([A :: not (C and D)],[A :: not C or not D])) |
   A :: not C or not D.
 
-% a . ¬(C ⊔ D)
-% ────────────
-% a . ¬C ⊓ ¬D
 '⊔-DeMorgan'@
   A :: not (C or D) <=>
   chr_msg(rule([A :: not (C or D)],[A :: not C and not D])) |
   A :: not C and not D.
 
-% a . ¬(∃R C)
-% ───────────
-% a . ∀R ¬C
 '∀-NNF'@
   A :: not (R some C) <=>
   chr_msg(rule([A :: not (R some C)],[A :: R only not C])) |
   A :: R only not C.
 
-% a . ¬(∀R C)
-% ───────────
-% a . ∃R ¬C
 '∃-NNF'@
   A :: not (R only C) <=>
   chr_msg(rule([A :: not (R only C)], [A :: R some not C])) |

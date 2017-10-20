@@ -37,7 +37,7 @@ chr_msg(_).
 % rule
 user:portray(rule(Froms,Tos)) :-
   forall(member(From, Froms), format("~p\n", [From])),
-  % TBD: dynamic width of line
+  % @tbd dynamic width of line
   format("────────────────────\n"),
   forall(member(To, Tos), format("~p\n", [To])),
   format("\n").
@@ -49,7 +49,7 @@ user:portray(false) :-
   format("❌").
 user:portray(A :: C) :-
   format("~p . ~p", [individual(A),concept(C)]).
-user:portray(C equiv D) :-
+user:portray(C equal D) :-
   format("~p ≡ ~p", [concept(C),concept(D)]).
 user:portray(C subclass D) :-
   format("~p ⊑ ~p", [concept(C),concept(D)]).
@@ -57,7 +57,7 @@ user:portray(C subclass D) :-
 % individual
 user:portray(individual(X)) :-
   var(X), !,
-  % TBD: pp vars
+  % @tbd pp vars
   format("~p", [X]).
 user:portray(individual((A,B))) :-
   format("〈~p,~p〉", [A,B]).
