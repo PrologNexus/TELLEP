@@ -31,79 +31,144 @@ rules from ALC to ALC-NNF.
 :- chr_constraint
    (::)/2, equiv/2, subclass/2.
 
-% a . ¬C
-% a .  C
-% ──────
-% ⊥
-'⊥'@
+/* bottom concept
+FL_0, FL^-, AL
+
+a . ⊥
+──────
+⊥
+
+a . ¬C
+a .  C
+──────
+⊥
+*/
+bottom_concept@
+  A :: bottom <=>
+  chr_msg(rule([A :: bottom],[false])) |
+  fail.
+contradiction@
   A :: not C, A :: C <=>
-  chr_msg(rule([A :: not C,A :: C],[concept(fail)])) |
+  chr_msg(rule([A :: not C,A :: C],[false])) |
   fail.
 
-% a . C ⊓ D
-% ─────────
-% a . C
-% a . D
-'⊓-elimination'@
+/* intersection
+FL_0, FL^`, AL
+
+a . C ⊓ D
+─────────
+a . C
+a . D
+*/
+intersection@
   A :: C and D <=>
   chr_msg(rule([A :: C and D],[A :: C,A :: D])) |
   A :: C, A :: D.
 
-% a . C ⊔ D
-% ──────┬──────
-% a . C │ a . D
-'⊔-elimination'@
+/* limited existential quantification
+FL^-, AL
+
+a . ∃R ⊤
+──────────
+〈a,b〉 . R
+*/
+limited_existential_quantification@
+  A :: R some top <=>
+  chr_msg(rule([A :: R some top],[(A,B) :: R])) |
+  (A,B) :: R.
+
+/* existential quantification
+???
+
+a . ∃R C
+──────────
+〈a,b〉 . R
+b . C
+*/
+existential_quantification@
+  A :: R some C <=>
+  chr_msg(rule([A :: R some C],[(A,B) :: R,B :: C])) |
+  (A,B) :: R,
+  B :: C.
+
+/* top concept
+FL_0, FL^-, AL
+
+a . ⊤
+*/
+top_concept@
+  A :: top <=>
+  chr_msg(rule([A :: top],[true])) |
+  true.
+
+/* union
+U
+
+a . C ⊔ D
+──────┬──────
+a . C │ a . D
+*/
+union@
   A :: C or D <=>
   chr_msg(rule([A :: C or D],[A :: C,A :: D])) |
   A :: C ; A :: D.
 
-% a . ∃R C
-% ──────────
-% 〈a,b〉 . R
-% b . C
-'∃-elimination'@
-  A :: R some C <=>
-  chr_msg(rule([A :: R some C],[(A,B) :: R,B :: C])) |
-  (A,B) :: R, B :: C.
+/* value restriction
+FL_0, FL^-, AL
 
-% a . ∀R C
-% 〈a,b〉 . R
-% ──────────
-% b . C
-'∀-elimination'@
+a . ∀R C
+〈a,b〉 . R
+──────────
+b . C
+*/
+value_restriction@
   A :: R only C, (A,B) :: R <=>
   chr_msg(rule([A :: R only C,(A,B) :: R],[B :: C])) |
   B :: C.
 
-% C ≡ D
-% ─────
-% C ⊑ D
-% D ⊑ C
-'≡-elimination'@
+
+
+/* TBox */
+
+/* equivalence
+
+C ≡ D
+─────
+C ⊑ D
+D ⊑ C
+*/
+equivalence@
   C equiv D <=>
   chr_msg(rule([C equiv D],[C subclass D,D subclass C])) |
   C subclass D,
   D subclass C.
 
-% a . C
-% C ⊑ D
-% ─────
-% a . D
-'T-Box'@
+/* subsumption
+
+a . C
+C ⊑ D
+─────
+a . D
+
+a . ¬C
+C ⊑ D
+──────
+a . ¬D
+*/
+positive_subsumption@
   A :: C,
   C subclass D <=>
   chr_msg(rule([A :: C,C subclass D],[A :: D])) |
   A :: D.
-
-% a . ¬C
-% C ⊑ D
-% ──────
-% a . ¬D
-'T-Box'@
+negative_subsumption@
   A :: not C,
   C subclass D <=>
   chr_msg(rule([A :: not C,C subclass D],[A :: not D])) |
   A :: not D.
+
+
+
+/* NNF */
 
 % a . ¬¬C
 % ───────

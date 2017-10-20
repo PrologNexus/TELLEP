@@ -43,12 +43,17 @@ user:portray(rule(Froms,Tos)) :-
   format("\n").
 
 % clause
+user:portray(true) :-
+  format("✓").
+user:portray(false) :-
+  format("❌").
 user:portray(A :: C) :-
   format("~p . ~p", [individual(A),concept(C)]).
 user:portray(C equiv D) :-
   format("~p ≡ ~p", [concept(C),concept(D)]).
 user:portray(C subclass D) :-
   format("~p ⊑ ~p", [concept(C),concept(D)]).
+
 % individual
 user:portray(individual(X)) :-
   var(X), !,
@@ -58,9 +63,12 @@ user:portray(individual((A,B))) :-
   format("〈~p,~p〉", [A,B]).
 user:portray(individual(A)) :-
   format("~a", [A]).
+
 % concept
-user:portray(concept(fail)) :-
+user:portray(concept(bottom)) :-
   format("⊥").
+user:portray(concept(top)) :-
+  format("⊤").
 user:portray(concept(not C)) :-
   format("¬~p", [concept(C)]).
 user:portray(concept(C and D)) :-
