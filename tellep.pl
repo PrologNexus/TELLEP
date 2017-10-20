@@ -1,8 +1,11 @@
 :- module(
   tellep,
   [
-    subClassOf/2,
     '::'/2,
+    equiv/2,
+    subclass/2,
+    op(952, xfx, equiv),
+    op(951, xfy, subclass),
     op(950, xfx, ::),
     op(940, xfy, or),
     op(930, xfy, and),
@@ -12,7 +15,12 @@
   ]
 ).
 
-/** <module> Tellep
+/** <module> TELLEP: Term rewriting and entailment engine
+
+This module implements the core of the TELLEP engine.
+
+It has constraints for the entailment of ALC, and it has rewriting
+rules from ALC to ALC-NNF.
 
 @author Wouter Beek
 @version 2017/10
@@ -20,12 +28,8 @@
 
 :- use_module(library(chr)).
 
-:- dynamic
-    subClassOf/2.
-
 :- chr_constraint
-   (::)/2.
-
+   (::)/2, equiv/2, subclass/2.
 
 % a . ¬C
 % a .  C
@@ -71,14 +75,24 @@
   chr_msg(rule([A :: R only C,(A,B) :: R],[B :: C])) |
   B :: C.
 
+% C ≡ D
+% ─────
+% C ⊑ D
+% D ⊑ C
+'≡-elimination'@
+  C equiv D <=>
+  chr_msg(rule([C equiv D],[C subclass D,D subclass C])) |
+  C subclass D,
+  D subclass C.
+
 % a . C
 % C ⊑ D
 % ─────
 % a . D
 'T-Box'@
-  A :: C <=>
-  subClassOf(C,D),
-  chr_msg(rule([A :: C,subClassOf(C,D)],[A :: D])) |
+  A :: C,
+  C subclass D <=>
+  chr_msg(rule([A :: C,C subclass D],[A :: D])) |
   A :: D.
 
 % a . ¬C
@@ -86,9 +100,9 @@
 % ──────
 % a . ¬D
 'T-Box'@
-  A :: not C <=>
-  subClassOf(C,D),
-  chr_msg(rule([A :: not C,subClassOf(C,D)],[A :: not D])) |
+  A :: not C,
+  C subclass D <=>
+  chr_msg(rule([A :: not C,C subclass D],[A :: not D])) |
   A :: not D.
 
 % a . ¬¬C

@@ -1,6 +1,8 @@
-#+TITLE: TELLEP: Yet Another DL Reasoned That Doesn't Compile
+#+TITLE: TELLEP
 #+AUTHOR: Wouter Beek
 #+STARTUP: latexpreview
+
+A simplistic Description Logic reasoner.
 
 * TR;DR
 
@@ -13,7 +15,7 @@ $ swipl debug.pl
 First, create your T-Box by asserting inclusion axioms:
 
 #+BEGIN_SRC prolog
-?- assert(subClassOf(human,fallible)).
+?- human subclass mortal.
 #+END_SRC
 
 Then, assert your A-Box:
@@ -27,15 +29,15 @@ answer:
 
 #+BEGIN_SRC
 socrates::human
-human ⊑ fallible
+human ⊑ mortal
 ────────────────
-socrates::fallible
+socrates::mortal
 #+END_SRC
 
 * Interaction language
 
 For interacting with the reasoner we use an ASCII-based notation that
-easy to type on most keyboards.  We stay close to the /Manchester
+is easy to type on most keyboards.  We stay close to the /Manchester
 Syntax/:
 
   | *Manchester formula* | *DL formula* |
@@ -64,3 +66,31 @@ to stay close to the syntax used in /Description Logic Handbook/:
   | ∃R C      | limited existential quantification | $\{ a \in \Delta^\mathcal{I} \vert \exists b . (a,b) \in R^\mathcal{I}}$                                   |
   | a::C      | concept assertion                  | $a^\mathcal{I} \in C^\mathcal{I}$                                                                          |
   | (a,b)::R  | role assertion                     | $(a^\mathcal{I}, b^\mathcal{I}) \in R^\mathcal{I}$                                                         |
+
+* Applications
+
+** Consistency checking
+synonym: <<Satisfiability>>
+
+When the state becomes inconsistent the falsum is derived.
+
+** Query answering
+Is socrates mortal?
+
+#+BEGIN_SRC prolog
+?- socrates :: mortal.
+#+END_SRC
+
+** Instance checking
+Is individual ‘a’ an instance of ‘C’?
+
+#+BEGIN_SRC prolog
+?- a :: C.
+#+END_SRC
+
+** subsumption
+Are all C's also D's?
+
+#+BEGIN_SRC prolog
+?- C ⊑ D.
+#+END_SRC

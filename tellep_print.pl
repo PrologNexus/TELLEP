@@ -30,13 +30,14 @@ this notation in the following two ways:
 
 chr_msg(Arg) :-
   debugging(tellep), !,
-  ansi_format([bg(yellow)], "~p", [Arg]).
+  ansi_format([], "~p", [Arg]).
 chr_msg(_).
 
 
 % rule
 user:portray(rule(Froms,Tos)) :-
   forall(member(From, Froms), format("~p\n", [From])),
+  % TBD: dynamic width of line
   format("────────────────────\n"),
   forall(member(To, Tos), format("~p\n", [To])),
   format("\n").
@@ -44,12 +45,15 @@ user:portray(rule(Froms,Tos)) :-
 % clause
 user:portray(A :: C) :-
   format("~p . ~p", [individual(A),concept(C)]).
-user:portray(subClassOf(C,D)) :-
+user:portray(C equiv D) :-
+  format("~p ≡ ~p", [concept(C),concept(D)]).
+user:portray(C subclass D) :-
   format("~p ⊑ ~p", [concept(C),concept(D)]).
 % individual
 user:portray(individual(X)) :-
   var(X), !,
-  format("affe").
+  % TBD: pp vars
+  format("~p", [X]).
 user:portray(individual((A,B))) :-
   format("〈~p,~p〉", [A,B]).
 user:portray(individual(A)) :-

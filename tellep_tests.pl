@@ -19,15 +19,15 @@ whether its behavior is still A-OK.
 test(test1, [fail]) :-
   call(socrates :: human and not human).
 
-test(test2, [setup(assert(subClassOf(human,animal))),
-             cleanup(retractall(subClassOf(human,animal)))]) :-
+test(test2, []) :-
   maplist(call, [
+    human subclass mortal,
     socrates :: human
   ]).
 
-test(test3, [setup(assert(subClassOf(human,not animal))),
-             cleanup(retractall(subClassOf(human,not animal)))]) :-
+test(test3, [fail]) :-
   maplist(call, [
+    human subclass not animal,
     artis :: inhabitant only animal,
     artis :: inhabitant some human
   ]).
