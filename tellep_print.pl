@@ -1,4 +1,5 @@
 :- module(tellep_print, [chr_msg/1]).
+:- reexport(tellep_op).
 
 /** <module> TELLEP: Print statements
 
@@ -23,8 +24,6 @@ this notation in the following two ways:
 */
 
 :- use_module(library(ansi_term)).
-:- use_module(tellep).
-
 
 %! chr_msg(+Arg:compound) is det.
 

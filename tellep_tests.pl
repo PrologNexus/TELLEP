@@ -1,4 +1,5 @@
 :- module(tellep_tests, []).
+:- reexport(tellep_op).
 
 /** <module> TELLEP: Automated tests
 
@@ -11,8 +12,8 @@ whether its behavior is still A-OK.
 
 :- use_module(library(apply)).
 :- use_module(library(plunit)).
-:- use_module(tellep).
-
+:- use_module(tellep_al).
+:- use_module(tellep_nnf).
 
 :- begin_tests(tellep).
 
