@@ -12,16 +12,11 @@ Start TELLEP in debug mode, for fancy printed messages:
 $ swipl debug.pl
 #+END_SRC
 
-First, create your T-Box by asserting inclusion axioms:
+Enter your T-Box and A-Box together, as a sequence of comma-separated
+assertions in the Prolog top-level:
 
 #+BEGIN_SRC prolog
-?- human subclass mortal.
-#+END_SRC
-
-Then, assert your A-Box:
-
-#+BEGIN_SRC prolog
-?- socrates :: human.
+?- human subclass mortal, socrates :: human.
 #+END_SRC
 
 Whenever something can de deduced, the reasoner will immediately

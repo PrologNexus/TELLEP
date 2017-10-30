@@ -30,7 +30,9 @@ rules from ALC to ALC-NNF.
 :- use_module(library(chr)).
 
 :- chr_constraint
-   (::)/2, equal/2, subclass/2.
+   (::)/2,
+   equal/2,
+   subclass/2.
 
 remove_duplicates@
   A :: C \ A :: C <=>
