@@ -1,3 +1,4 @@
+:- encoding(utf8).
 :- module(tellep_print, [chr_msg/1]).
 
 /** <module> TELLEP: Print statements
@@ -48,7 +49,7 @@ user:portray(true) :-
 user:portray(false) :-
   format("❌").
 user:portray(A :: C) :-
-  format("~p . ~p", [individual(A),concept(C)]).
+  format("~p :: ~p", [individual(A),concept(C)]).
 user:portray(C equal D) :-
   format("~p ≡ ~p", [concept(C),concept(D)]).
 user:portray(C subclass D) :-
