@@ -37,30 +37,30 @@ Syntax/:
 
   | *Manchester formula* | *DL formula* |
   |----------------------+--------------|
-  | subClassOf(C,D)      | C ⊑ D        |
-  | fail                 | ⊥            |
-  | not A                | (¬A)         |
-  | C and D              | (C ⊓ D)      |
-  | R only C             | ∀R C         |
-  | R some C             | ∃R C         |
-  | a::C                 | a::C         |
-  | (a,b)::R             | (a,b)::R     |
+  | ~subClassOf(C,D)~    | ~C ⊑ D~      |
+  | ~fail~               | ~⊥~          |
+  | ~not A~              | ~(¬A)~       |
+  | ~C and D~            | ~(C ⊓ D)~    |
+  | ~R only C~           | ~∀R C~       |
+  | ~R some C~           | ~∃R C~       |
+  | ~a::C~               | ~a::C~       |
+  | ~(a,b)::R~           | ~(a,b)::R~   |
 
 * Presentation language
 
 For presenting/printing results we can use non-ASCII symbols.  We try
 to stay close to the syntax used in /Description Logic Handbook/:
 
-  | *Formula* | *Fancy name*                       | *Meaning*                                                                                                  |
-  |-----------+------------------------------------+------------------------------------------------------------------------------------------------------------|
-  | C ⊑ D     | inclusion axiom                    | $C^\mathcal{I} \subseteq D^\mathcal{I}$                                                                    |
-  | ⊥         | falsum                             | $\emptyset$                                                                                                |
-  | (¬A)      | atomic negation                    | $\Delta^\mathcal{I} \setminus A^\mathcal{I}$                                                               |
-  | (C ⊓ D)   | intersection                       | $C^\mathcal{I} \cap D^\mathcal{I}$                                                                         |
-  | ∀R C      | value restriction                  | $\{ a \in \Delta^\mathcal{I} \vert \forall b . (a,b) \in R^\mathcal{I} \rightarrow b \in C^\mathcal{I} \}$ |
-  | ∃R C      | limited existential quantification | $\{ a \in \Delta^\mathcal{I} \vert \exists b . (a,b) \in R^\mathcal{I}}$                                   |
-  | a::C      | concept assertion                  | $a^\mathcal{I} \in C^\mathcal{I}$                                                                          |
-  | (a,b)::R  | role assertion                     | $(a^\mathcal{I}, b^\mathcal{I}) \in R^\mathcal{I}$                                                         |
+  | *Formula*  | *Fancy name*                       | *Meaning*                                                                                                  |
+  |------------+------------------------------------+------------------------------------------------------------------------------------------------------------|
+  | ~C ⊑ D~    | inclusion axiom                    | $C^\mathcal{I} \subseteq D^\mathcal{I}$                                                                    |
+  | ~⊥~        | falsum                             | $\emptyset$                                                                                                |
+  | ~(¬A)~     | atomic negation                    | $\Delta^\mathcal{I} \setminus A^\mathcal{I}$                                                               |
+  | ~(C ⊓ D)~  | intersection                       | $C^\mathcal{I} \cap D^\mathcal{I}$                                                                         |
+  | ~∀R C~     | value restriction                  | $\{ a \in \Delta^\mathcal{I} \vert \forall b . (a,b) \in R^\mathcal{I} \rightarrow b \in C^\mathcal{I} \}$ |
+  | ~∃R C~     | limited existential quantification | $\{ a \in \Delta^\mathcal{I} \vert \exists b . (a,b) \in R^\mathcal{I}}$                                   |
+  | ~a::C~     | concept assertion                  | $a^\mathcal{I} \in C^\mathcal{I}$                                                                          |
+  | ~(a,b)::R~ | role assertion                     | $(a^\mathcal{I}, b^\mathcal{I}) \in R^\mathcal{I}$                                                         |
 
 * Applications
 
