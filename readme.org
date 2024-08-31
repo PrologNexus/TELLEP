@@ -58,7 +58,7 @@ to stay close to the syntax used in /Description Logic Handbook/:
   | ~(¬A)~     | atomic negation                    | $\Delta^\mathcal{I} \setminus A^\mathcal{I}$                                                               |
   | ~(C ⊓ D)~  | intersection                       | $C^\mathcal{I} \cap D^\mathcal{I}$                                                                         |
   | ~∀R C~     | value restriction                  | $\{ a \in \Delta^\mathcal{I} \vert \forall b . (a,b) \in R^\mathcal{I} \rightarrow b \in C^\mathcal{I} \}$ |
-  | ~∃R C~     | limited existential quantification | $\{ a \in \Delta^\mathcal{I} \vert \exists b . (a,b) \in R^\mathcal{I}}$                                   |
+  | ~∃R C~     | limited existential quantification | $\{ a \in \Delta^\mathcal{I} \vert \exists b . (a,b) \in R^\mathcal{I} \}$                                 |
   | ~a::C~     | concept assertion                  | $a^\mathcal{I} \in C^\mathcal{I}$                                                                          |
   | ~(a,b)::R~ | role assertion                     | $(a^\mathcal{I}, b^\mathcal{I}) \in R^\mathcal{I}$                                                         |
 
